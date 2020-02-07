@@ -131,7 +131,7 @@
         android:id="@+id/textExplain"
         android:layout_width="247dp"
         android:layout_height="286dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:text="@string/main_msg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
