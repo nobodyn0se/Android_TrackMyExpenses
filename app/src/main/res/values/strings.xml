@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Track My Expenses</string>
+    <string name="sort_by_highest">Sort by Highest</string>
+    <string name="delete_msg">Delete</string>
+    <string name="bottom_label">Created by Nobody Nose</string>
+    <string name="view_msg">View</string>
+    <string name="add_msg">Add Data</string>
+    <string name="text_expense">Expense</string>
+    <string name="text_purpose">Purpose</string>
+    <string name="edit_hint_expense">How much?</string>
+    <string name="edit_hint_purpose">Where did you spend?</string>
+    <string name="main_msg"><b>1. Entries are case-sensitive. If there exists another purpose with the same name, the corresponding expense value would be updated.\n\n
+    2. If you want to log a credit amount, precede the expense amount with a negative (-) sign.\n\n
+        3. Using the Sort by Highest will display the database in a descending order</b></string>
 </resources>

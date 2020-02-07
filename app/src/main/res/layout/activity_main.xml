@@ -16,9 +16,10 @@
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:ems="10"
-        android:hint="Where did you spend?"
+        android:hint="@string/edit_hint_purpose"
         android:inputType="text"
         android:textSize="14sp"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/label_purpose"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,9 +34,10 @@
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:ems="10"
-        android:hint="How much?"
+        android:hint="@string/edit_hint_expense"
         android:inputType="numberSigned"
         android:textSize="14sp"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/label_expense"
@@ -49,7 +51,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginTop="72dp"
         android:gravity="center"
-        android:text="Purpose"
+        android:text="@string/text_purpose"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +65,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="Expense"
+        android:text="@string/text_expense"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +78,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="28dp"
-        android:text="Add Data"
+        android:text="@string/add_msg"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_expense" />
@@ -88,7 +90,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:text="View "
+        android:text="@string/view_msg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_delete"
         app:layout_constraintTop_toBottomOf="@+id/input_expense" />
@@ -98,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Created by Nobody Nose"
+        android:text="@string/bottom_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -108,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Delete"
+        android:text="@string/delete_msg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_expense" />
@@ -120,9 +122,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="19dp"
         android:layout_marginRight="19dp"
-        android:text="Sort by Highest"
+        android:text="@string/sort_by_highest"
         android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textExplain"
+        android:layout_width="247dp"
+        android:layout_height="286dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/main_msg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
