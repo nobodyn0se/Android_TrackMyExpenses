@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".MainActivity">
 
     <EditText
@@ -17,9 +18,9 @@
         android:layout_marginRight="60dp"
         android:ems="10"
         android:hint="@string/edit_hint_purpose"
-        android:inputType="text"
-        android:textSize="14sp"
         android:importantForAutofill="no"
+        android:inputType="textVisiblePassword|text"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/label_purpose"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,19 +29,16 @@
         android:id="@+id/input_expense"
         android:layout_width="212dp"
         android:layout_height="37dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:ems="10"
         android:hint="@string/edit_hint_expense"
+        android:importantForAutofill="no"
         android:inputType="numberSigned"
         android:textSize="14sp"
-        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/label_expense"
+        app:layout_constraintStart_toStartOf="@+id/input_purpose"
         app:layout_constraintTop_toBottomOf="@+id/input_purpose" />
 
     <TextView
@@ -68,6 +66,7 @@
         android:text="@string/text_expense"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/label_purpose"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_purpose" />
 
@@ -136,5 +135,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_delete" />
+
+    <TextView
+        android:id="@+id/total_view"
+        android:layout_width="130dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/textExplain"
+        app:layout_constraintStart_toStartOf="@+id/label_expense"
+        app:layout_constraintTop_toBottomOf="@+id/btn_add"
+        app:layout_constraintVertical_bias="0.432" />
+
+    <TextView
+        android:id="@+id/totview30"
+        android:layout_width="150dp"
+        android:layout_height="33dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintStart_toStartOf="@+id/btn_delete"
+        app:layout_constraintTop_toTopOf="@+id/total_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

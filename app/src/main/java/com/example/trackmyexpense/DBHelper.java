@@ -51,6 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
         rs.moveToFirst();
 
             int exp_update = rs.getInt(0);
+            rs.close();
             exp_update += expense;   //add new expenses to update the field and prevent redundancies
             cv.put("Expense", exp_update);
             long r = db.update(TABLE_NAME, cv, "Purpose = ?", new String[]{purpose});
@@ -91,6 +92,24 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         s.close();  //prevents cursor leaks
         return 0;
+    }
+
+    public int last30sum() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String Q = "SELECT COUNT(SerialNumber) FROM exptable";
+        Cursor s = db.rawQuery(Q, null);
+        s.moveToFirst();
+
+        if(s.getInt(0) < 30) { System.out.println(s.getInt(0)); s.close(); return 0; }
+        else {
+            Q = String.format("SELECT SUM(%s) as Total FROM (SELECT %s FROM %s ORDER BY %s DESC LIMIT 30) %s ", C_EXPENSE, C_EXPENSE, TABLE_NAME, C_NUMBER, TABLE_NAME);
+            s = db.rawQuery(Q, null);
+            s.moveToFirst();
+            int ret = s.getInt(0);
+            System.out.println(ret);
+            s.close();
+            return ret;
+        }
     }
 
     public Integer remove(String id) {
