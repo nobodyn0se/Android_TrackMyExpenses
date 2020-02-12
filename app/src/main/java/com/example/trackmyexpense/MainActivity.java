@@ -130,8 +130,12 @@ public class MainActivity extends AppCompatActivity {
                                 Double per = Double.parseDouble(r.getString(2))/f1 * 100;  //calculate percentage of total expenditure for current entry
                                 DecimalFormat df = new DecimalFormat("#.##");
 
-                                builder.append("ID: " + r.getString(0) + "\n").append("Reason: " + r.getString(1) + "\n").append("Rs: " +
-                                        r.getString(2) + " (" + df.format(per) + "%)\n\n");
+                                final String getID = "ID: " + r.getString(0) + "\n";
+                                final String getReason = "Reason: " + r.getString(1) + "\n";
+                                final String getExpense = "Rs: " +
+                                        r.getString(2) + " (" + df.format(per) + "%)\n\n";
+
+                                builder.append(getID).append(getReason).append(getExpense);
                             }
                             r.close(); //close cursor to prevent leaks
                             showMessage("Total Rs. " + f1, builder.toString());
@@ -147,20 +151,16 @@ public class MainActivity extends AppCompatActivity {
                             StringBuilder builder = new StringBuilder();
                             int f1 = mdb.sum();
                             while (rs.moveToNext()) {
-                                //builder.append("No: " + rs.getString(0) + "\n");
-                                //builder.append("Reason: " + rs.getString(1) + "\n");
 
                                 Double per = Double.parseDouble(rs.getString(2))/f1 * 100;  //calculate percentage
                                 DecimalFormat df = new DecimalFormat("#.##");       //round off to 2 decimal places
-                                //builder.append("Rs: " + rs.getString(2) + " (" + df.format(per) + "%)\n\n");
 
-                                //final String getID = "ID: " + rs.getString(0) + "\n";
-                                //final String getReason = "Reason: " + rs.getString(1) + "\n";
-                                //final String getExpense = "Rs: " +
-                                        //rs.getString(2) + " (" + df.format(per) + "%)\n\n"
+                                final String getID = "ID: " + rs.getString(0) + "\n";
+                                final String getReason = "Reason: " + rs.getString(1) + "\n";
+                                final String getExpense = "Rs: " +
+                                        rs.getString(2) + " (" + df.format(per) + "%)\n\n";
 
-                                builder.append("ID: " + rs.getString(0) + "\n").append("Reason: " + rs.getString(1) + "\n").append("Rs: " +
-                                        rs.getString(2) + " (" + df.format(per) + "%)\n\n");
+                                builder.append(getID).append(getReason).append(getExpense);
                             }
 
                             rs.close();     //cursor close
