@@ -114,26 +114,23 @@ public class MainActivity extends AppCompatActivity {
                             Cursor r = mdb.get_desc();
 
                             if (r.getCount() == 0) {
-                                showMessage("Error", "No Data");
+                                showMessage("Database Empty", "No Data Has Been Entered Yet");
                                 r.close();
                                 return;
                             }
-                            //StringBuilder builder = new StringBuilder();
-                            StringBuffer buffer = new StringBuffer();
+
+                            StringBuilder builder = new StringBuilder();
                             int f1 = mdb.sum();
                             while (r.moveToNext()) {
-                                //SpannableString id = new SpannableString(r.getString(0));
-                                //id.setSpan(new StyleSpan(Typeface.BOLD), 0, id.length(), 0);
-                                //buffer.append("ID: " + id);
-                                buffer.append("ID: " + r.getString(0) + "\n");
-                                buffer.append("Reason: " + r.getString(1) + "\n");
 
                                 Double per = Double.parseDouble(r.getString(2))/f1 * 100;  //calculate percentage of total expenditure for current entry
                                 DecimalFormat df = new DecimalFormat("#.##");
-                                buffer.append("Rs: " + r.getString(2) + " (" + df.format(per) + "%)\n\n");
+
+                                builder.append("ID: " + r.getString(0) + "\n").append("Reason: " + r.getString(1) + "\n").append("Rs: " +
+                                        r.getString(2) + " (" + df.format(per) + "%)\n\n");
                             }
                             r.close(); //close cursor to prevent leaks
-                            showMessage("Total Rs. " + f1, buffer.toString());
+                            showMessage("Total Rs. " + f1, builder.toString());
                         }
                         else {          //get non sorted values if the switch if toggled off (default)
                             Cursor rs = mdb.get();
@@ -143,19 +140,22 @@ public class MainActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            StringBuffer buffer = new StringBuffer();
+                            StringBuilder builder = new StringBuilder();
                             int f1 = mdb.sum();
                             while (rs.moveToNext()) {
-                                buffer.append("No: " + rs.getString(0) + "\n");
-                                buffer.append("Reason: " + rs.getString(1) + "\n");
+                                //builder.append("No: " + rs.getString(0) + "\n");
+                                //builder.append("Reason: " + rs.getString(1) + "\n");
 
                                 Double per = Double.parseDouble(rs.getString(2))/f1 * 100;  //calculate percentage
                                 DecimalFormat df = new DecimalFormat("#.##");       //round off to 2 decimal places
-                                buffer.append("Rs: " + rs.getString(2) + " (" + df.format(per) + "%)\n\n");
+                                //builder.append("Rs: " + rs.getString(2) + " (" + df.format(per) + "%)\n\n");
+
+                                builder.append("ID: " + rs.getString(0) + "\n").append("Reason: " + rs.getString(1) + "\n").append("Rs: " +
+                                        rs.getString(2) + " (" + df.format(per) + "%)\n\n");
                             }
 
                             rs.close();     //cursor close
-                            showMessage("Total Rs. " + f1, buffer.toString());
+                            showMessage("Total Rs. " + f1, builder.toString());
                         }
                         disp_total();
                     }
