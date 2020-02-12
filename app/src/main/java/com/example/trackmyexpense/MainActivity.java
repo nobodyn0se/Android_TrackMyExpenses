@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
                             if (r.getCount() == 0) {
                                 showMessage("Error", "No Data");
+                                r.close();
                                 return;
                             }
                             //StringBuilder builder = new StringBuilder();
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             Cursor rs = mdb.get();
                             if (rs.getCount() == 0) {
                                 showMessage("Error", "No Data");
+                                rs.close();
                                 return;
                             }
 

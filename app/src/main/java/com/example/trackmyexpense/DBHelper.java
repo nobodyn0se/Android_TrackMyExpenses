@@ -34,7 +34,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
 
-
     public boolean check_update(String purpose) {
         SQLiteDatabase db = this.getReadableDatabase();
         String Query = String.format("SELECT * FROM %s WHERE Purpose = \"%s\"", TABLE_NAME, purpose);
@@ -75,26 +74,15 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor get() {
-        Cursor rs = null;
-        try {
-            SQLiteDatabase db = getReadableDatabase();
-            rs = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-            return rs;
-        } finally {
-            if(rs != null) {rs.close();}   //cursor closed (no more leaks)
-        }
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor rs = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        return rs;
     }
 
     public Cursor get_desc() {
-        Cursor cur = null;
-        try {
-            SQLiteDatabase db = this.getReadableDatabase();
-            cur = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY Expense DESC", null);
-            return cur;
-        }
-        finally {
-            if(cur != null) {cur.close();}
-        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY Expense DESC", null);
+        return cur;
     }
 
     public int sum() {
@@ -122,7 +110,7 @@ public class DBHelper extends SQLiteOpenHelper {
             s = db.rawQuery(Q, null);
             s.moveToFirst();
             int ret = s.getInt(0);
-            //System.out.println("\n\nLast 30 expense: " + ret);
+
             s.close();
             return ret;
         }
