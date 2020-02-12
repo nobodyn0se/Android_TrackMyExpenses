@@ -12,7 +12,7 @@
     <string name="main_msg"><b>1. Entries are case-sensitive. If there exists another purpose with the same name, the corresponding expense value would be updated.\n\n
     2. If you want to log a credit amount, precede the expense amount with a negative (-) sign.\n\n
         3. Using the Sort by Highest option will display the database in descending order.</b></string>
-    <string name="no_num">Total (Last 30 days): N/A</string>
-    <string name="tot30days">Total (Last 30 days): Rs. %1$d</string>
-    <string name="main_total">All-Time Total: Rs. %1$d</string>
+    <string name="no_num">Total (Last 30 days)\nN/A</string>
+    <string name="tot30days">Total (Last 30 entries)\nRs. %1$d</string>
+    <string name="main_total">All-Time Total\nRs. %1$d</string>
 </resources>

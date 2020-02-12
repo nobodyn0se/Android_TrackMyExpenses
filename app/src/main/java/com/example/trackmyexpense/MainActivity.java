@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,13 +23,20 @@ public class MainActivity extends AppCompatActivity {
     DBHelper mdb;
     public TextView tot, last30tot;
 
-    Handler handler = new Handler(); //using handler to run last 30 days sum method on another thread, leaving main thread responsive
+    public void disp_total() {
+        int x = mdb.last30sum();
+        int y = mdb.sum();
+        if(x == 0) last30tot.setText(R.string.no_num);
+        else last30tot.setText(getString(R.string.tot30days, x));
+        tot.setText(getString(R.string.main_total, y));
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mdb = new DBHelper(this);
+        mdb = DBHelper.getInstance(this);
 
         editPurpose = findViewById(R.id.input_purpose);
         editExpense = findViewById(R.id.input_expense);
@@ -44,21 +51,13 @@ public class MainActivity extends AppCompatActivity {
         last30tot = findViewById(R.id.totview30);
 
         //Creating definition for new thread to set TextView
-        Thread total30 = new Thread() {
+        Thread t1 = new Thread(new Runnable() {
+            @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int x = mdb.last30sum();
-                        int y = mdb.sum();
-                        if(x == 0) last30tot.setText(R.string.no_num);
-                        else last30tot.setText(getString(R.string.tot30days, x));
-                        tot.setText(getString(R.string.main_total, y));
-                    }
-                });
+                disp_total();
             }
-        };
-        total30.start();
+        });
+        t1.start();
             //New Thread to retrieve Total on run-time and setTextView to display the same
         AddData();
         ViewData();
@@ -66,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void AddData() {
-        new Thread(new Runnable() {
+        Executors.newCachedThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 add.setOnClickListener(new View.OnClickListener() {
@@ -97,14 +95,16 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this, "Data not inserted", Toast.LENGTH_LONG).show();
                             }
                         }
+                        disp_total();
                     }
                 });
+
             }
-        }).start();
+        });
     }
 
     public void ViewData() {
-        new Thread(new Runnable() {
+        Executors.newCachedThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 view.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                 showMessage("Error", "No Data");
                                 return;
                             }
-
+                            //StringBuilder builder = new StringBuilder();
                             StringBuffer buffer = new StringBuffer();
                             int f1 = mdb.sum();
                             while (r.moveToNext()) {
@@ -149,21 +149,21 @@ public class MainActivity extends AppCompatActivity {
 
                                 Double per = Double.parseDouble(rs.getString(2))/f1 * 100;  //calculate percentage
                                 DecimalFormat df = new DecimalFormat("#.##");       //round off to 2 decimal places
-                                System.out.println(df.format(per));
                                 buffer.append("Rs: " + rs.getString(2) + " (" + df.format(per) + "%)\n\n");
                             }
 
                             rs.close();     //cursor close
                             showMessage("Total Rs. " + f1, buffer.toString());
                         }
+                        disp_total();
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public void DelData() {
-        new Thread(new Runnable() {
+        Executors.newCachedThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 del.setOnClickListener(new View.OnClickListener() {
@@ -203,11 +203,10 @@ public class MainActivity extends AppCompatActivity {
                         });
 
                         builder.show();
-
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public void showMessage(String title, String message) {

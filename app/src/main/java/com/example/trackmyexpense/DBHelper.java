@@ -7,13 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "expense.db";
-    public static final String TABLE_NAME = "exptable";
-    public static final String C_NUMBER = "SerialNumber";
-    public static final String C_PURPOSE= "Purpose";
-    public static final String C_EXPENSE = "Expense";
+    private static DBHelper sInstance;
 
-    public DBHelper(Context context) {
+    private static final String DATABASE_NAME = "expense.db";
+    private static final String TABLE_NAME = "exptable";
+    private static final String C_NUMBER = "SerialNumber";
+    private static final String C_PURPOSE= "Purpose";
+    private static final String C_EXPENSE = "Expense";
+
+    public static synchronized DBHelper getInstance(Context ctx) {
+        if(sInstance == null) sInstance = new DBHelper(ctx.getApplicationContext());
+        return sInstance;
+    }
+
+    private DBHelper(Context context) {
         //creates the DB, passing context, name, null value for factory when the constructor is invoked
         super(context, DATABASE_NAME, null, 1);
     }
@@ -25,14 +32,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
+
 
     public boolean check_update(String purpose) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String Query = String.format("SELECT * FROM %s WHERE Purpose = '%s'", TABLE_NAME, purpose);
+        SQLiteDatabase db = this.getReadableDatabase();
+        String Query = String.format("SELECT * FROM %s WHERE Purpose = \"%s\"", TABLE_NAME, purpose);
 
             Cursor rs = db.rawQuery(Query, null);
             if (rs.getCount() <= 0) {
@@ -51,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
         rs.moveToFirst();
 
             int exp_update = rs.getInt(0);
-            rs.close();
+            rs.close();         //close cursor
             exp_update += expense;   //add new expenses to update the field and prevent redundancies
             cv.put("Expense", exp_update);
             long r = db.update(TABLE_NAME, cv, "Purpose = ?", new String[]{purpose});
@@ -70,15 +75,26 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor get() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor rs = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        return rs;
+        Cursor rs = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            rs = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+            return rs;
+        } finally {
+            if(rs != null) {rs.close();}   //cursor closed (no more leaks)
+        }
     }
 
     public Cursor get_desc() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY Expense DESC", null);
-        return cur;
+        Cursor cur = null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            cur = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY Expense DESC", null);
+            return cur;
+        }
+        finally {
+            if(cur != null) {cur.close();}
+        }
     }
 
     public int sum() {
@@ -100,13 +116,13 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor s = db.rawQuery(Q, null);
         s.moveToFirst();
 
-        if(s.getInt(0) < 30) { System.out.println(s.getInt(0)); s.close(); return 0; }
+        if(s.getInt(0) < 30) { s.close(); return 0; }
         else {
             Q = String.format("SELECT SUM(%s) as Total FROM (SELECT %s FROM %s ORDER BY %s DESC LIMIT 30) %s ", C_EXPENSE, C_EXPENSE, TABLE_NAME, C_NUMBER, TABLE_NAME);
             s = db.rawQuery(Q, null);
             s.moveToFirst();
             int ret = s.getInt(0);
-            System.out.println(ret);
+            //System.out.println("\n\nLast 30 expense: " + ret);
             s.close();
             return ret;
         }
