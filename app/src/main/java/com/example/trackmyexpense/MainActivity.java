@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddData() {
-        Executors.newCachedThreadPool().execute(new Runnable() {
+        ExecutorService e = Executors.newFixedThreadPool(2);
+        e.execute(new Runnable() {
             @Override
             public void run() {
                 add.setOnClickListener(new View.OnClickListener() {
@@ -101,10 +103,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        e.shutdown();
     }
 
     public void ViewData() {
-        Executors.newCachedThreadPool().execute(new Runnable() {
+        ExecutorService e = Executors.newFixedThreadPool(10);
+        e.execute(new Runnable() {
             @Override
             public void run() {
                 view.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +154,11 @@ public class MainActivity extends AppCompatActivity {
                                 DecimalFormat df = new DecimalFormat("#.##");       //round off to 2 decimal places
                                 //builder.append("Rs: " + rs.getString(2) + " (" + df.format(per) + "%)\n\n");
 
+                                //final String getID = "ID: " + rs.getString(0) + "\n";
+                                //final String getReason = "Reason: " + rs.getString(1) + "\n";
+                                //final String getExpense = "Rs: " +
+                                        //rs.getString(2) + " (" + df.format(per) + "%)\n\n"
+
                                 builder.append("ID: " + rs.getString(0) + "\n").append("Reason: " + rs.getString(1) + "\n").append("Rs: " +
                                         rs.getString(2) + " (" + df.format(per) + "%)\n\n");
                             }
@@ -162,10 +171,12 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        e.shutdown();
     }
 
     public void DelData() {
-        Executors.newCachedThreadPool().execute(new Runnable() {
+        ExecutorService e = Executors.newFixedThreadPool(5);
+        e.execute(new Runnable() {
             @Override
             public void run() {
                 del.setOnClickListener(new View.OnClickListener() {
@@ -185,10 +196,12 @@ public class MainActivity extends AppCompatActivity {
                                 String ip = num.getText().toString();
                                 if(!ip.isEmpty()) {
                                     Integer x = mdb.remove(ip);
-                                    if(x > 0)
+                                    if(x > 0) {
                                         Toast.makeText(MainActivity.this, "Data deleted", Toast.LENGTH_SHORT).show();
+                                        disp_total();
+                                    }
                                     else
-                                        Toast.makeText(MainActivity.this, "Data not deleted", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "ID does not exist", Toast.LENGTH_SHORT).show();
                                 }
 
                                 else {
@@ -203,12 +216,12 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         });
-
                         builder.show();
                     }
                 });
             }
         });
+        e.shutdown(); //Shut the executor service when threads are no longer needed
     }
 
     public void showMessage(String title, String message) {
