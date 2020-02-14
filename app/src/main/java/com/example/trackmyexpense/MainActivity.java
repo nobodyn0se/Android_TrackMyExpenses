@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddData() {
-        ExecutorService e = Executors.newFixedThreadPool(2);
-        e.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 add.setOnClickListener(new View.OnClickListener() {
@@ -102,12 +101,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             }
-        });
-        e.shutdown();
+        }).start();
     }
 
     public void ViewData() {
-        ExecutorService e = Executors.newFixedThreadPool(10);
+        ExecutorService e = Executors.newFixedThreadPool(8);
         e.execute(new Runnable() {
             @Override
             public void run() {
@@ -175,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void DelData() {
-        ExecutorService e = Executors.newFixedThreadPool(5);
-        e.execute(new Runnable() {
+        new Thread (new Runnable() {
             @Override
             public void run() {
                 del.setOnClickListener(new View.OnClickListener() {
@@ -220,8 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
-        e.shutdown(); //Shut the executor service when threads are no longer needed
+        }).start();
     }
 
     public void showMessage(String title, String message) {
